@@ -1,3 +1,10 @@
+Technologie jakie użyłem/Technologies I've used: 
+  <img src="https://github.com/devicons/devicon/blob/master/icons/java/java-original.svg" title="Nextjs" **alt="Nextjs" width="40" height="40"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/spring/spring-original.svg" title="Nextjs" **alt="Nextjs" width="40" height="40"/>
+  <img src="https://github.com/devicons/devicon/blob/master/icons/maven/maven-original-wordmark.svg" title="Nextjs" **alt="Nextjs" width="40" height="40"/>
+
+
+
 Java Version: 21
 Spring Version: 4.1.2
 Apache Maven Version: 3.10
