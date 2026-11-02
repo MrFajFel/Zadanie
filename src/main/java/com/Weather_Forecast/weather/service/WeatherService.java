@@ -6,26 +6,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class WeatherService {
 
     private final String API_URL =
-            "https://api.weatherbit.io/v2.0/forecast/daily?days=16&key=a94767f919bc44c3999221a69d3580a4&city=Raleigh,NC&country=US&units=M";
+            "https://api.weatherbit.io/v2.0/forecast/daily?days=1&key=a94767f919bc44c3999221a69d3580a4&city={city}&country={country}&units=M";
+
+    private final String[][] CITIES = {
+            {"Jastarnia", "PL"},
+            {"Bridgetown", "BB"},
+            {"Fortaleza", "BR"},
+            {"Pissouri", "CY"},
+            {"London", "GB"}
+    };
 
     @Autowired
     private RestTemplate restTemplate;
 
     public List<Weather> getWeathers() {
 
-        WeatherResponse response =
-                restTemplate.getForObject(API_URL, WeatherResponse.class);
+        List<Weather> result = new ArrayList<>();
 
-        return response != null
-                ? response.getData()
-                : Collections.emptyList();
+        for (String[] c : CITIES) {
+            try {
+                WeatherResponse response =
+                        restTemplate.getForObject(API_URL, WeatherResponse.class, c[0], c[1]);
+
+                if (response == null || response.getData() == null || response.getData().isEmpty()) continue;
+
+                Weather w = response.getData().get(0);   // today
+                w.setCity(response.getCityName());
+                w.setCountry(response.getCountryCode());
+                result.add(w);
+
+            } catch (Exception e) {
+                System.out.println("Failed for " + c[0] + ": " + e.getMessage());
+            }
+        }
+
+        return result;
     }
 }

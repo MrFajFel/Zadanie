@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Weather</h1>
+
+<table border="1" cellpadding="8">
+    <thead>
+    <tr><th>City</th><th>Country</th><th>Temperature</th><th>Wind speed</th></tr>
+    </thead>
+    <tbody id="rows"></tbody>
+</table>
+
+<script>
+    fetch('/api/weather')
+      .then(r => r.status === 204 ? [] : r.json())
+      .then(items => {
+        document.getElementById('rows').innerHTML = items.length
+          ? items.map(w =>
+              `<tr><td>${w.city}</td><td>${w.country}</td><td>${w.temp}°C</td><td>${w.wind_spd} m/s</td></tr>`
+            ).join('')
+          : '<tr><td colspan="4">No data</td></tr>';
+      });
+</script>
+</body>
+</html>
