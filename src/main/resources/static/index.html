@@ -5,7 +5,7 @@
 
 <table border="1" cellpadding="8">
     <thead>
-    <tr><th>City</th><th>Country</th><th>Temperature</th><th>Wind speed</th></tr>
+    <tr><th>City</th><th>Country</th><th>Temperature</th><th>Wind speed</th><th>Safety</th>></tr>
     </thead>
     <tbody id="rows"></tbody>
 </table>
@@ -16,10 +16,11 @@
       .then(items => {
         document.getElementById('rows').innerHTML = items.length
           ? items.map(w =>
-              `<tr><td>${w.city}</td><td>${w.country}</td><td>${w.temp}°C</td><td>${w.wind_spd} m/s</td></tr>`
+              `<tr><td>${w.city}</td><td>${w.country}</td><td>${w.temp}°C</td><td>${w.wind_spd} m/s</td><td>${w.wind_spd < 5 || w.wind_spd > 18 && w.temp < 5 || w.temp > 35 ? "windsurfing is dangerous!" : "windsurfing is okay"}</td></tr>`
             ).join('')
           : '<tr><td colspan="4">No data</td></tr>';
       });
+
 </script>
 </body>
 </html>
