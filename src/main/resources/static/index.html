@@ -26,8 +26,10 @@
 
 <script>
     function load(){
-        const days = document.getElementById("days").value;
-
+        let days = document.getElementById("days").value;
+        if(parseInt(days) > 16 || parseInt(days) < 1){
+            alert("Brak danych prosze podać prawidłową wartość")
+        }else{
         fetch(`/api/weather?days=${days}`)
           .then(r => r.status === 204 ? [] : r.json())
           .then(items => {
@@ -37,6 +39,7 @@
                 ).join('')
               : '<tr><td colspan="4">No data</td></tr>';
           });
+        }
     }
 
     function checkTheBestPlace() {
@@ -65,7 +68,7 @@
     if (allLocations[0]) {
         bestPlace.textContent = `${allLocations[0].city}, ${allLocations[0].country}`;
     } else {
-        bestPlace.textContent = "No safe place found";
+        bestPlace.textContent = "Nie ma takiego miejsca";
     }
 
 }
