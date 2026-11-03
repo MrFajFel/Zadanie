@@ -18,9 +18,15 @@ public class WeatherController {
     private WeatherService weatherService;
 
     @GetMapping("/api/weather")
-    public ResponseEntity<List<Weather>> getWeathers() {
+    public ResponseEntity<List<Weather>> getWeathers(@RequestParam(defaultValue = "16") int days) {
 
-        List<Weather> weathers = weatherService.getWeathers();
+
+
+        if (days < 1 || days > 16){
+            return ResponseEntity.badRequest().build();
+        }
+
+        List<Weather> weathers = weatherService.getWeathers(days);
 
         if (weathers.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

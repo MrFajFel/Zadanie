@@ -1,26 +1,68 @@
 <!DOCTYPE html>
 <html>
 <body>
-<h1>Weather</h1>
+<h1>Przewidywana temperatura i siła wiatru </h1>
+
+
+<input type="number" id="days" min="1" max="16">
+<button onclick="load()">Szukaj</button>
+<button onclick="checkTheBestPlace()">Sprawdz najlepsza temperature</button>
+
+<p id="bestPlace"></p>
+
 
 <table border="1" cellpadding="8">
     <thead>
-    <tr><th>City</th><th>Country</th><th>Temperature</th><th>Wind speed</th><th>Safety</th></tr>
+    <tr><th>Miasto</th><th>Państwo</th><th>Temperatura</th><th>Prędkośc wiatru</th><th>Bezpieczeństwo</th></tr>
     </thead>
     <tbody id="rows"></tbody>
 </table>
 
 <script>
-    fetch('/api/weather')
-      .then(r => r.status === 204 ? [] : r.json())
-      .then(items => {
-        document.getElementById('rows').innerHTML = items.length
-          ? items.map(w =>
-              `<tr><td>${w.city}</td><td>${w.country}</td><td>${w.temp}°C</td><td>${w.wind_spd} m/s</td><td>${w.wind_spd < 5 || w.wind_spd > 18 && w.temp < 5 || w.temp > 35 ? "windsurfing is dangerous!" : "windsurfing is okay"}</td></tr>`
-            ).join('')
-          : '<tr><td colspan="4">No data</td></tr>';
-      });
+    function load(){
+        const days = document.getElementById("days").value;
 
+        fetch(`/api/weather?days=${days}`)
+          .then(r => r.status === 204 ? [] : r.json())
+          .then(items => {
+            document.getElementById('rows').innerHTML = items.length
+              ? items.map(w =>
+                  `<tr><td class="cities">${w.city}</td><td class="countries">${w.country}</td><td class="temp">${w.temp}°C</td><td class="wind">${w.wind_spd} m/s</td><td class="place">${w.wind_spd < 5 || w.wind_spd > 18 && w.temp < 5 || w.temp > 35 ? "windsurfing is dangerous!" : "windsurfing is okay"}</td></tr>`
+                ).join('')
+              : '<tr><td colspan="4">No data</td></tr>';
+          });
+    }
+
+    function checkTheBestPlace() {
+    let countries = document.querySelectorAll(".countries");
+    let cities = document.querySelectorAll(".cities");
+    let temperatures = document.querySelectorAll(".temp");
+    let windSpeeds = document.querySelectorAll(".wind");
+    let isThePlaceSafe = document.querySelectorAll(".place");
+    let allLocations = [];
+
+    for (let i = 0; i < temperatures.length; i++) {
+        if (isThePlaceSafe[i].textContent.trim() === "windsurfing is okay") {
+            let result = parseInt(windSpeeds[i].textContent) * 3 + parseInt(temperatures[i].textContent);
+
+            allLocations.push({
+                country: countries[i].textContent,
+                city: cities[i].textContent,
+                result: result
+            });
+        }
+    }
+
+    let bestPlace = document.getElementById("bestPlace");
+    allLocations.sort((a, b) => b.result - a.result);
+    console.log(allLocations[0])
+    if (allLocations[0]) {
+        bestPlace.textContent = `${allLocations[0].city}, ${allLocations[0].country}`;
+    } else {
+        bestPlace.textContent = "No safe place found";
+    }
+
+}
 </script>
 </body>
 </html>
