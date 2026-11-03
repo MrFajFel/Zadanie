@@ -13,7 +13,7 @@ import java.util.List;
 public class WeatherService {
 
     private final String API_URL =
-            "https://api.weatherbit.io/v2.0/forecast/daily?days={days}&key=1d9f1cca34cd44d6a14fd8431f84a699&city={city}&country={country}&units=M";
+            "https://api.weatherbit.io/v2.0/forecast/daily?days={days}&key=a94767f919bc44c3999221a69d3580a4&city={city}&country={country}&units=M";
 
     private final String[][] CITIES = {
             {"Jastarnia", "PL"},
